@@ -35,6 +35,7 @@ module.exports = function(app) {
     });
   }));
 
+  // To translate user string to JSON and vice versa
   passport.serializeUser(User.serializeUser());
   passport.deserializeUser(User.deserializeUser());
 
