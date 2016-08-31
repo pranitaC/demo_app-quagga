@@ -2,6 +2,7 @@ var mongoose = require("../db/connection");
 var Schema = mongoose.Schema;
 var passportLocalMongoose = require('passport-local-mongoose');
 
+// User Schema
 var User = new Schema({
   name: { type: String, required: true, min: 3, max: 64 },
   username: { type: String, required: true, min: 3, max: 64 },
