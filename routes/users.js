@@ -1,13 +1,13 @@
 var express = require('express');
-var passport = require('passport');
 var router = express.Router();
 var User = require('models/user');
-
 var jwt = require('jsonwebtoken');
 var secret = require('config/secret');
+var authenticate = require('authenticate');
+var passport = require('passport');
 
-// Requesting all users
-router.get('/', passport.authenticate('jwt',{ session: false }), function(req, res, next) {
+// Requesting all users 
+router.get('/', authenticate , function(req, res, next) {
   User.find(function(err, users){
     res.send(users);
   })
@@ -29,15 +29,19 @@ router.post('/register', function(req, res){
   });
 });
 
-// Login Route for Existing User
-router.post('/login', passport.authenticate('local',{}), function(req, res){
+/** Login Route for Existing User 
+* This route post data for username and password and locally authenticate the user
+* And send the response with name and user_id in userInfo with jwt JWT 
+**/
+router.post('/login', passport.authenticate('local') , function(req, res){
   var user = req.user;
   var userInfo = { name: user.name, id: user._id };
   var token = jwt.sign(userInfo, secret,{ expiresIn: 3600 });
-  res.send(token);
+  res.send("JWT " + token);
 });
 
-router.get('/logout',passport.authenticate('jwt',{ session: false }), function(req, res){
+
+router.get('/logout', authenticate , function(req, res){
   res.send(req.user);
 });
 
